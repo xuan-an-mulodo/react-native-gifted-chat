@@ -63,23 +63,6 @@ export default class Avatar extends React.PureComponent {
       return null;
     }
 
-    if (
-      !showAvatarForEveryMessage &&
-      isSameUser(this.props.currentMessage, messageToCompare) &&
-      isSameDay(this.props.currentMessage, messageToCompare)
-    ) {
-      return (
-        <View style={[styles[this.props.position].container, this.props.containerStyle[this.props.position]]}>
-          <GiftedAvatar
-            avatarStyle={StyleSheet.flatten([
-              styles[this.props.position].image,
-              this.props.imageStyle[this.props.position],
-            ])}
-          />
-        </View>
-      );
-    }
-
     return (
       <View
         style={[
