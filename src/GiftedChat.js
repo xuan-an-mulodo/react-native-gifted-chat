@@ -341,21 +341,21 @@ class GiftedChat extends React.Component {
       };
     });
 
-    if (shouldResetInputToolbar === true) {
-      this.setIsTypingDisabled(true);
+    this.setIsTypingDisabled(true);
+
+    this.props.onSend(messages, () => {
+      if (this.getIsMounted() !== true) {
+        return;
+      }
+      this.setIsTypingDisabled(false);
+    }, () => {
       this.resetInputToolbar();
-    }
-
-    this.props.onSend(messages);
-    this.scrollToBottom();
-
-    if (shouldResetInputToolbar === true) {
-      setTimeout(() => {
-        if (this.getIsMounted() === true) {
-          this.setIsTypingDisabled(false);
-        }
-      }, 100);
-    }
+      this.scrollToBottom();
+      if (this.getIsMounted() !== true) {
+        return;
+      }
+      this.setIsTypingDisabled(false);
+    });
   }
 
   resetInputToolbar() {
@@ -517,7 +517,7 @@ GiftedChat.defaultProps = {
   placeholder: 'Type a message...',
   messageIdGenerator: () => uuid.v4(),
   user: {},
-  onSend: () => {},
+  onSend: () => { },
   locale: null,
   timeFormat: 'LT',
   dateFormat: 'll',
@@ -526,7 +526,7 @@ GiftedChat.defaultProps = {
     android: false,
   }),
   loadEarlier: false,
-  onLoadEarlier: () => {},
+  onLoadEarlier: () => { },
   isLoadingEarlier: false,
   renderLoading: null,
   renderLoadEarlier: null,
