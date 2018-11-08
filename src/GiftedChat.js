@@ -561,6 +561,7 @@ GiftedChat.defaultProps = {
   }),
   onInputTextChanged: null,
   maxInputLength: null,
+  onBeginRefresh: () => {},
 };
 
 GiftedChat.propTypes = {
@@ -607,6 +608,7 @@ GiftedChat.propTypes = {
   keyboardShouldPersistTaps: PropTypes.oneOf(['always', 'never', 'handled']),
   onInputTextChanged: PropTypes.func,
   maxInputLength: PropTypes.number,
+  onBeginRefresh: PropTypes.func,
 };
 
 export {

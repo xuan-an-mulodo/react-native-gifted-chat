@@ -4,6 +4,7 @@ import React from 'react';
 import {
   ListView,
   View,
+  RefreshControl,
 } from 'react-native';
 
 import shallowequal from 'shallowequal';
@@ -29,7 +30,8 @@ export default class MessageContainer extends React.Component {
 
     const messagesData = this.prepareMessages(props.messages);
     this.state = {
-      dataSource: dataSource.cloneWithRows(messagesData.blob, messagesData.keys)
+      dataSource: dataSource.cloneWithRows(messagesData.blob, messagesData.keys),
+      refreshing: false,
     };
   }
 
@@ -70,6 +72,16 @@ export default class MessageContainer extends React.Component {
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(messagesData.blob, messagesData.keys)
     });
+  }
+
+  onRefresh = () => {
+    this.setState({ refreshing: true });
+    this.onBeginRefresh()
+      .finally(() => this.setState({ refreshing: false }));
+  }
+
+  async onBeginRefresh() {
+    return this.props.onBeginRefresh();
   }
 
   renderFooter() {
@@ -145,6 +157,12 @@ export default class MessageContainer extends React.Component {
           initialListSize={20}
           pageSize={20}
 
+          refreshControl={
+            <RefreshControl
+              onRefresh={this.onRefresh}
+              refreshing={this.state.refreshing}
+            />
+          }
           {...this.props.listViewProps}
 
           dataSource={this.state.dataSource}
@@ -166,6 +184,7 @@ MessageContainer.defaultProps = {
   renderMessage: null,
   onLoadEarlier: () => {
   },
+  onBeginRefresh: () => {},
 };
 
 MessageContainer.propTypes = {
@@ -175,4 +194,5 @@ MessageContainer.propTypes = {
   renderMessage: PropTypes.func,
   onLoadEarlier: PropTypes.func,
   listViewProps: PropTypes.object,
+  onBeginRefresh: PropTypes.func,
 };
